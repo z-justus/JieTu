@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Utilities\Util
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module", "Module\Module.csproj", "{480776E3-3D6E-4A2D-84E0-934B83E79E5A}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{B91C2167-E27F-41C7-87AD-AAC91D277F4F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,12 +77,6 @@ Global
 		{480776E3-3D6E-4A2D-84E0-934B83E79E5A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{480776E3-3D6E-4A2D-84E0-934B83E79E5A}.Release|x86.ActiveCfg = Release|Any CPU
 		{480776E3-3D6E-4A2D-84E0-934B83E79E5A}.Release|x86.Build.0 = Release|Any CPU
-		{B91C2167-E27F-41C7-87AD-AAC91D277F4F}.Debug|Any CPU.ActiveCfg = Debug
-		{B91C2167-E27F-41C7-87AD-AAC91D277F4F}.Debug|Mixed Platforms.ActiveCfg = Debug
-		{B91C2167-E27F-41C7-87AD-AAC91D277F4F}.Debug|x86.ActiveCfg = Debug
-		{B91C2167-E27F-41C7-87AD-AAC91D277F4F}.Release|Any CPU.ActiveCfg = Release
-		{B91C2167-E27F-41C7-87AD-AAC91D277F4F}.Release|Mixed Platforms.ActiveCfg = Release
-		{B91C2167-E27F-41C7-87AD-AAC91D277F4F}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
