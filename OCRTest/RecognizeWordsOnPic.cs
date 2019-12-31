@@ -15,11 +15,17 @@ using System.Web;
 using Utilities;
 using Module;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace OCRTest
 {
     public partial class RecognizeWordsOnPic : Form
     {
+        private ScreenForm screenForm = new ScreenForm();
+        private Bitmap currentBitmap;
+        public Image ScreenShotImage { get; set; }
+
+
         private bool m_recongnizeFinished = false;
         private string m_recongnizeText = string.Empty;
 
@@ -29,6 +35,13 @@ namespace OCRTest
             InitializeComponent();
             m_originalPictureBox.AllowDrop = true;
             ResetProgressBar(false);
+        }
+
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            screenForm.ScreenShotOk += new EventHandler(OnScreenShotOkClick);
         }
 
         private void ResetProgressBar(bool visible, int max = 100, int value = 0)
@@ -289,5 +302,103 @@ namespace OCRTest
                 PasteAndRecognize();
             }
         }
+
+        private void OnScreenShotButtonClick(object sender, EventArgs e)
+        {
+            try
+            {
+                timer1.Start();
+            }
+            catch
+            {
+                MessageBox.Show("选择文件出错！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }           
+        }
+
+        #region 伪录屏 
+
+        [DllImport("user32.dll")]
+        static extern bool GetCursorInfo(out CURSORINFO pci);
+
+        private const Int32 CURSOR_SHOWING = 0x00000001;
+        [StructLayout(LayoutKind.Sequential)]
+        struct POINT
+        {
+            public Int32 x;
+            public Int32 y;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct CURSORINFO
+        {
+            public Int32 cbSize;
+            public Int32 flags;
+            public IntPtr hCursor;
+            public POINT ptScreenPos;
+        }
+
+        private void Timer1_Tick_1(object sender, EventArgs e)
+        {
+            Image myimage = new Bitmap(Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height);
+            Graphics g = Graphics.FromImage(myimage);
+            g.CopyFromScreen(new Point(0, 0), new Point(0, 0), new Size(Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height));
+            CURSORINFO pci;
+            pci.cbSize = Marshal.SizeOf(typeof(CURSORINFO));
+            GetCursorInfo(out pci);
+            System.Windows.Forms.Cursor cur = new System.Windows.Forms.Cursor(pci.hCursor);
+            cur.Draw(g, new Rectangle(pci.ptScreenPos.x - 10, pci.ptScreenPos.y - 10, cur.Size.Width, cur.Size.Height));
+            m_originalPictureBox.Image = myimage;
+        }
+
+        #endregion
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Hide();//隐藏当前
+                this.currentBitmap = GetScreen();
+                screenForm.BackgroundImage = this.currentBitmap;
+                screenForm.StartPosition = FormStartPosition.Manual;//起始位置
+                screenForm.ShowDialog();
+
+                m_originalPictureBox.Image = ScreenShotImage;
+                Recognize();
+            }
+            catch
+            {
+                MessageBox.Show("选择文件出错！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        public Bitmap GetScreen()
+        {
+            //获取整个屏幕图像,不包括任务栏
+            Rectangle ScreenArea = Screen.GetWorkingArea(this);
+            Bitmap bitmap = new Bitmap(ScreenArea.Width, ScreenArea.Height);
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.CopyFromScreen(0, 0, 0, 0, new Size(ScreenArea.Width, ScreenArea.Height));
+            }
+            return bitmap;
+        }
+
+        
+        private void OnScreenShotOkClick(object sender, EventArgs e)
+        {
+            Bitmap bmp = new Bitmap(screenForm.End.X - screenForm.Start.X, screenForm.End.Y - screenForm.Start.Y);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                int w = screenForm.End.X - screenForm.Start.X;
+                int h = screenForm.End.Y - screenForm.Start.Y;
+                Rectangle destRect = new Rectangle(0, 0, w + 1, h + 1);//在画布上要显示的区域（记得像素加1）
+                Rectangle srcRect = new Rectangle(screenForm.Start.X, screenForm.Start.Y - 15, w + 1, h + 1);//图像上要截取的区域
+                g.DrawImage(currentBitmap, destRect, srcRect, GraphicsUnit.Pixel);//加图像绘制到画布上
+            }
+            ScreenShotImage = bmp;
+            this.Show();
+        }
+
+
     }
 }
