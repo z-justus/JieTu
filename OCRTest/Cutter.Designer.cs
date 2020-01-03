@@ -1,6 +1,6 @@
 ﻿namespace OCRTest
 {
-    partial class ScreenForm
+    partial class Cutter
     {
         /// <summary>
         /// Required designer variable.
@@ -30,16 +30,22 @@
         {
             this.SuspendLayout();
             // 
-            // ScreenForm
+            // Cutter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Name = "ScreenForm";
-            this.Text = "ScreenForm";
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnScreenFormMouseDown);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnScreenFormMouseMove);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnScreenFormMouseUp);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Name = "Cutter";
+            this.Text = "Cutter";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.OnCutterLoad);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnCutterMouseClick);
+            this.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.Cutter_MouseDoubleClick);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnCutterMouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Cutter_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Cutter_MouseUp);
             this.ResumeLayout(false);
 
         }

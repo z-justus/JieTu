@@ -352,25 +352,80 @@ namespace OCRTest
 
         #endregion
 
-        private void Button1_Click(object sender, EventArgs e)
+        private void OnScreenShotTwoButtonClick(object sender, EventArgs e)
         {
             try
             {
                 this.Hide();//隐藏当前
-                this.currentBitmap = GetScreen();
-                screenForm.BackgroundImage = this.currentBitmap;
-                screenForm.StartPosition = FormStartPosition.Manual;//起始位置
-                screenForm.ShowDialog();
+                Thread.Sleep(500);
 
-                m_originalPictureBox.Image = ScreenShotImage;
-                Recognize();
+                #region 第二种方法  
+                GetImageTwo();
+                #endregion
+
+                #region 第一种方法
+
+                //this.currentBitmap = GetScreen();
+                //screenForm.BackgroundImage = this.currentBitmap;
+                //screenForm.StartPosition = FormStartPosition.Manual;//起始位置
+                //screenForm.ShowDialog();
+                ////m_originalPictureBox.Image = ScreenShotImage;
+                ////Recognize();
+                #endregion
+
             }
-            catch
+            catch(Exception ex)
             {
                 MessageBox.Show("选择文件出错！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Show();
             }
         }
 
+        #region 第二种需要方法
+
+        Cutter m_cutter = null;
+
+        private void GetImageTwo()
+        {
+            // 新建一个和屏幕大小相同的图片
+            Bitmap CatchBmp = new Bitmap(Screen.AllScreens[0].Bounds.Width, Screen.AllScreens[0].Bounds.Height);
+
+            // 创建一个画板，让我们可以在画板上画图  // 这个画板也就是和屏幕大小一样大的图片
+            // 我们可以通过Graphics这个类在这个空白图片上画图
+            Graphics g = Graphics.FromImage(CatchBmp);
+
+            // 把屏幕图片拷贝到我们创建的空白图片 CatchBmp中
+            g.CopyFromScreen(new Point(0, 0), new Point(0, 0), new Size(Screen.AllScreens[0].Bounds.Width, Screen.AllScreens[0].Bounds.Height));
+
+            // 创建截图窗体
+            m_cutter = new Cutter();
+
+            // 指示窗体的背景图片为屏幕图片
+            m_cutter.BackgroundImage = CatchBmp;
+            // 显示窗体
+            //cutter.Show();
+            // 如果Cutter窗体结束，则从剪切板获得截取的图片，并显示在聊天窗体的发送框中
+            if (m_cutter.ShowDialog() == DialogResult.OK)
+            {
+                IDataObject iData = Clipboard.GetDataObject();
+
+                this.Show();
+                if (iData.GetDataPresent(DataFormats.Bitmap))
+                {
+                    if (m_cutter.ImageScreenShot==null)
+                    {
+                        return;
+                    }
+                    m_originalPictureBox.Image = m_cutter.ImageScreenShot;
+                    Recognize();
+                }
+            }
+        }
+
+        #endregion
+
+
+        #region 第一种截屏所需方法
         public Bitmap GetScreen()
         {
             //获取整个屏幕图像,不包括任务栏
@@ -386,8 +441,36 @@ namespace OCRTest
         
         private void OnScreenShotOkClick(object sender, EventArgs e)
         {
-            Bitmap bmp = new Bitmap(screenForm.End.X - screenForm.Start.X, screenForm.End.Y - screenForm.Start.Y);
-            using (Graphics g = Graphics.FromImage(bmp))
+            GetBackImage();           
+        }
+
+        private void GetBackImage()
+        {
+            Bitmap bitmap;
+            if (screenForm.End.X > screenForm.Start.X && screenForm.End.Y > screenForm.Start.Y)
+            {
+                bitmap = ToRightAndBottom();
+            }
+            else if (screenForm.End.X > screenForm.Start.X && screenForm.End.Y <= screenForm.Start.Y)
+            {
+                bitmap = ToRightAndTop();
+            }
+            else if (screenForm.End.X <= screenForm.Start.X && screenForm.End.Y > screenForm.Start.Y)
+            {
+                bitmap = ToLeftAndBottom();
+            }
+            else
+            {
+                bitmap = ToLeftAndTop();
+            }
+            ScreenShotImage = bitmap;
+            this.Show();
+        }
+
+        private Bitmap ToRightAndBottom()
+        {
+            Bitmap bitmap = new Bitmap(screenForm.End.X - screenForm.Start.X, screenForm.End.Y - screenForm.Start.Y);
+            using (Graphics g = Graphics.FromImage(bitmap))
             {
                 int w = screenForm.End.X - screenForm.Start.X;
                 int h = screenForm.End.Y - screenForm.Start.Y;
@@ -395,10 +478,56 @@ namespace OCRTest
                 Rectangle srcRect = new Rectangle(screenForm.Start.X, screenForm.Start.Y - 15, w + 1, h + 1);//图像上要截取的区域
                 g.DrawImage(currentBitmap, destRect, srcRect, GraphicsUnit.Pixel);//加图像绘制到画布上
             }
-            ScreenShotImage = bmp;
-            this.Show();
+
+            return bitmap;
         }
 
+        private Bitmap ToRightAndTop()
+        {
+            Bitmap bitmap = new Bitmap(screenForm.End.X - screenForm.Start.X, screenForm.Start.Y - screenForm.End.Y);
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                int w = screenForm.End.X - screenForm.Start.X;
+                int h = screenForm.Start.Y - screenForm.End.Y;
+                Rectangle destRect = new Rectangle(0, 0, w + 1, h + 1);//在画布上要显示的区域（记得像素加1）
+                Rectangle srcRect = new Rectangle(screenForm.Start.X, screenForm.End.Y + 15, w + 1, h + 1);//图像上要截取的区域
+                g.DrawImage(currentBitmap, destRect, srcRect, GraphicsUnit.Pixel);//加图像绘制到画布上
+            }
+
+            return bitmap;
+        }
+
+        private Bitmap ToLeftAndBottom()
+        {
+            Bitmap bitmap = new Bitmap(screenForm.Start.X - screenForm.End.X, screenForm.End.Y - screenForm.Start.Y);
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                int w = screenForm.Start.X - screenForm.End.X;
+                int h = screenForm.End.Y - screenForm.Start.Y;
+                Rectangle destRect = new Rectangle(0, 0, w + 1, h + 1);//在画布上要显示的区域（记得像素加1）
+                Rectangle srcRect = new Rectangle(screenForm.End.X, screenForm.Start.Y - 15, w + 1, h + 1);//图像上要截取的区域
+                g.DrawImage(currentBitmap, destRect, srcRect, GraphicsUnit.Pixel);//加图像绘制到画布上
+            }
+
+            return bitmap;
+        }
+
+        private Bitmap ToLeftAndTop()
+        {
+            Bitmap bitmap = new Bitmap(screenForm.Start.X - screenForm.End.X, screenForm.Start.Y - screenForm.End.Y);
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                int w = screenForm.Start.X - screenForm.End.X;
+                int h = screenForm.Start.Y - screenForm.End.Y;
+                Rectangle destRect = new Rectangle(0, 0, w + 1, h + 1);//在画布上要显示的区域（记得像素加1）
+                Rectangle srcRect = new Rectangle(screenForm.End.X, screenForm.End.Y - 15, w + 1, h + 1);//图像上要截取的区域
+                g.DrawImage(currentBitmap, destRect, srcRect, GraphicsUnit.Pixel);//加图像绘制到画布上
+            }
+
+            return bitmap;
+        }
+
+        #endregion
 
     }
 }

@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.m_screenShot = new System.Windows.Forms.Button();
             this.m_selectPictureButton = new System.Windows.Forms.Button();
             this.m_imagePathText = new System.Windows.Forms.TextBox();
@@ -42,7 +43,6 @@
             this.m_resultTextBox = new System.Windows.Forms.RichTextBox();
             this.m_progressBar = new System.Windows.Forms.ProgressBar();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_originalPictureBox)).BeginInit();
             this.m_cms.SuspendLayout();
@@ -64,9 +64,19 @@
             this.panel1.Size = new System.Drawing.Size(1135, 50);
             this.panel1.TabIndex = 0;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(1027, 15);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "截图";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.OnScreenShotTwoButtonClick);
+            // 
             // m_screenShot
             // 
-            this.m_screenShot.Location = new System.Drawing.Point(946, 12);
+            this.m_screenShot.Location = new System.Drawing.Point(934, 12);
             this.m_screenShot.Name = "m_screenShot";
             this.m_screenShot.Size = new System.Drawing.Size(75, 23);
             this.m_screenShot.TabIndex = 3;
@@ -76,7 +86,7 @@
             // 
             // m_selectPictureButton
             // 
-            this.m_selectPictureButton.Location = new System.Drawing.Point(644, 14);
+            this.m_selectPictureButton.Location = new System.Drawing.Point(573, 14);
             this.m_selectPictureButton.Name = "m_selectPictureButton";
             this.m_selectPictureButton.Size = new System.Drawing.Size(75, 23);
             this.m_selectPictureButton.TabIndex = 2;
@@ -88,7 +98,7 @@
             // 
             this.m_imagePathText.Location = new System.Drawing.Point(75, 15);
             this.m_imagePathText.Name = "m_imagePathText";
-            this.m_imagePathText.Size = new System.Drawing.Size(570, 21);
+            this.m_imagePathText.Size = new System.Drawing.Size(500, 21);
             this.m_imagePathText.TabIndex = 1;
             // 
             // m_tipLabel
@@ -162,16 +172,6 @@
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick_1);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(1027, 15);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "截图";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // RecognizeWordsOnPic
             // 
