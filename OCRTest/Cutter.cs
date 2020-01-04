@@ -72,6 +72,8 @@ namespace OCRTest
                 Visible = false
             };
 
+            m_closeButton.Click += OnCloseButtonClick;
+            m_comfirmButton.Click += OnComfirmButtonClick;
             this.Controls.Add(m_closeButton);
             this.Controls.Add(m_comfirmButton);
         }
@@ -142,6 +144,35 @@ namespace OCRTest
             }
         }
 
+        private void OnComfirmButtonClick(object sender, EventArgs e)
+        {
+            // 新建一个与矩形一样大小的空白图片
+            Bitmap CatchedBmp = new Bitmap(m_catchRectangle.Width, m_catchRectangle.Height);
+            Graphics graphics = Graphics.FromImage(CatchedBmp);
+
+            // 把originBmp中指定部分按照指定大小画到空白图片上  // CatchRectangle指定originBmp中指定部分
+            // 第二个参数指定绘制到空白图片的位置和大小
+            // 画完后CatchedBmp不再是空白图片了，而是具有与截取的图片一样的内容
+            graphics.DrawImage(m_originBmp, new Rectangle(0, 0, m_catchRectangle.Width, m_catchRectangle.Height), m_catchRectangle, GraphicsUnit.Pixel);
+
+            // 将图片保存到剪切板中
+            Clipboard.SetImage(CatchedBmp);
+            ImageScreenShot = Clipboard.GetImage();
+            graphics.Dispose();
+            m_catchFinished = false;
+            this.BackgroundImage = m_originBmp;
+            CatchedBmp.Dispose();
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        private void OnCloseButtonClick(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+
         /// <summary>
         /// 鼠标移动事件处理程序，即用户改变截图大小的处理
         ///  这个方法是截图功能的核心方法，也就是绘制截图
@@ -191,20 +222,6 @@ namespace OCRTest
             }
         }
 
-        private void ShowButton()
-        {
-            m_closeButton.Visible = true;
-            m_comfirmButton.Visible = true;
-            var location = m_catchRectangle.Location;
-
-            m_closeButton.Location = new Point(
-                m_catchRectangle.Width + location.X - m_comfirmButton.Width - m_closeButton.Width,
-                m_catchRectangle.Height + location.Y + 2);
-            m_comfirmButton.Location = new Point(
-                m_catchRectangle.Width + location.X - m_comfirmButton.Width,
-                m_catchRectangle.Height + location.Y + 2);
-        }
-
         /// <summary>
         /// 左键弹起结束截屏
         /// </summary>
@@ -222,6 +239,20 @@ namespace OCRTest
                     ShowButton();
                 }
             }
+        }
+
+        private void ShowButton()
+        {
+            m_closeButton.Visible = true;
+            m_comfirmButton.Visible = true;
+            var location = m_catchRectangle.Location;
+
+            m_closeButton.Location = new Point(
+                m_catchRectangle.Width + location.X - m_comfirmButton.Width - m_closeButton.Width,
+                m_catchRectangle.Height + location.Y + 2);
+            m_comfirmButton.Location = new Point(
+                m_catchRectangle.Width + location.X - m_comfirmButton.Width,
+                m_catchRectangle.Height + location.Y + 2);
         }
 
     }
