@@ -119,7 +119,7 @@ namespace OCRTest
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Cutter_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void OnCutterMouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left && m_catchFinished)
             {
@@ -179,7 +179,7 @@ namespace OCRTest
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Cutter_MouseMove(object sender, MouseEventArgs e)
+        private void OnCutterMouseMove(object sender, MouseEventArgs e)
         {
             // 确保截图开始
             if (m_catchStart)
@@ -227,7 +227,7 @@ namespace OCRTest
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Cutter_MouseUp(object sender, MouseEventArgs e)
+        private void OnCutterMouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {

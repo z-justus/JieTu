@@ -42,10 +42,10 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.OnCutterLoad);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnCutterMouseClick);
-            this.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.Cutter_MouseDoubleClick);
+            this.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.OnCutterMouseDoubleClick);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnCutterMouseDown);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Cutter_MouseMove);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Cutter_MouseUp);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnCutterMouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnCutterMouseUp);
             this.ResumeLayout(false);
 
         }
