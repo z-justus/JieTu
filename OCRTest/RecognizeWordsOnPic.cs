@@ -16,6 +16,7 @@ using Utilities;
 using Module;
 using System.Threading;
 using System.Runtime.InteropServices;
+using ScreenCapture;
 
 namespace OCRTest
 {
@@ -529,5 +530,15 @@ namespace OCRTest
 
         #endregion
 
+        /// <summary>
+        /// wpf截图
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button2_Click(object sender, EventArgs e)
+        {
+            CaptureWindow capture = new CaptureWindow();
+            capture.
+        }
     }
 }

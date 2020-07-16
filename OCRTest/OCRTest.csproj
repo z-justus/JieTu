@@ -124,6 +124,10 @@
       <Project>{480776E3-3D6E-4A2D-84E0-934B83E79E5A}</Project>
       <Name>Module</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ScreenCapture\ScreenCapture.csproj">
+      <Project>{D008F89C-E61E-484A-A8FB-2940DD68890B}</Project>
+      <Name>ScreenCapture</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.csproj">
       <Project>{1F06E565-FF54-4A1F-BC28-B3A01B5A8065}</Project>
       <Name>Utilities</Name>

@@ -1,0 +1,17 @@
+﻿<Window x:Class="ScreenCapture.DingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ScreenCapture"
+        mc:Ignorable="d"
+        ShowInTaskbar="False"
+        Topmost="True"
+        x:Name="window" WindowStyle="None" AllowsTransparency="True" BorderBrush="Gray" BorderThickness="0.5">
+    <Grid x:Name="pictureGrid">
+        <Image RenderOptions.BitmapScalingMode="HighQuality" Source="{Binding Bmp,ElementName=window}"/>
+        <!--<Grid.Background>
+            <ImageBrush ImageSource="{Binding Bmp,ElementName=window}"/>
+        </Grid.Background>-->
+    </Grid>
+</Window>
